@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+        <%= title %>
+    </title>
+    <link rel='stylesheet' href='/css/bootstrap.min.css' />
+    <link rel='stylesheet' href='/stylesheets/pace.min.css' />
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+
+<body class="bg-linear">
+    <div class="container-fluid register">
+        <div class="row">
+            <div class="col-md-3 register-left">
+                <img src="/images/logo_white.png" alt="" />
+                <h3>Welcome</h3>
+                <p>If you are approved you can continue your test!</p>
+                <input type="button" value="Continue Test" id="continue" />
+                <br />
+            </div>
+            <div class="col-md-9 register-right">
+                <ul class="nav nav-tabs nav-justified" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="home-tab" style="pointer-events: none;" data-toggle="tab" href="#home"
+                            role="tab" aria-controls="home" aria-selected="true">Apply</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="profile-tab" style="pointer-events: none;" data-toggle="tab" href="#profile"
+                            role="tab" aria-controls="profile" aria-selected="false">Success</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                        <h3 class="register-heading">Apply as a Employee</h3>
+                        <form id="register" method="post" enctype="multipart/form-data">
+                            <div class="row register-form">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" id="FirstName" name="FirstName"
+                                            placeholder="First Name *" value="" />
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" id="LastName" name="LastName"
+                                            placeholder="Last Name *" value="" />
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="email" class="form-control" id="Email" name="Email" placeholder="Your Email *"
+                                            value="" />
+                                    </div>
+                                    <div class="form-group">
+                                        <span id="Error" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <input type="text" id="Phone" name="Phone" class="form-control" placeholder="Your Phone"
+                                            value="" />
+                                    </div>
+                                    <div class="form-group">
+                                        <select class="form-control" id="Position" name="Position">
+                                            <option class="hidden" value="" selected disabled>Please select your
+                                                postion *</option>
+                                            <% positions.forEach((position, index) => { 
+                                         if(position.Available == 1){  
+                                        %>
+                                            <option value="<%= position.ID %>">
+                                                <%= position.Name %>
+                                            </option>
+                                            <% } }) %>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="CV" class="btn btn-primary btn-block">Select Your CV(.pdf) *</label>
+                                        <input type="file" class="form-control" id="CV" name="CV" style="display: none" />
+                                    </div>
+                                    <input type="submit" class="btnRegister" value="Register" />
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="tab-pane fade show" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                        <h3 class="register-heading">Application send sucessfully</h3>
+                        <div class="row register-form">
+                            <h6 class="register-heading">We well send back an email if you approved</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/javascripts/pace.min.js"></script>
+    <script>
+        $(document).ajaxStart(function () {
+            Pace.restart()
+        });
+        $(document).ready(function () {
+            $("#continue").click(function () {
+                window.location = '/continue';
+            })
+            $("form#register").submit(function (e) {
+                e.preventDefault();
+                var firstName = $('#FirstName').val();
+                var lastName = $('#LastName').val();
+                var email = $('#Email').val();
+                var position = $('#Position').val();
+                console.log(position);
+                var cv = $('#CV').val();
+                if (firstName == '' || lastName == '' || email == '' || cv == '') {
+                    $('#Error').html('Please enter required fields');
+                    return false;
+                }
+                if (position == null) {
+                    $('#Error').html('Please select position to apply');
+                    return false;
+                }
+                var filter =
+                    /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                if (!filter.test(email)) {
+                    $('#Error').html('Please enter valid email');
+                    return false;
+                }
+                $.ajax({
+                    url: '/checkEmail/' + email,
+                    type: 'GET',
+                    success: function () {
+                        var form = $("#register");
+                        var formData = new FormData(form[0]);
+                        $.ajax({
+                            url: '/addRegistration',
+                            type: 'POST',
+                            data: formData,
+                            success: function (data) {
+                                $('#myTab a[href="#profile"]').tab('show');
+                            },
+                            error: function (xhr) {
+                                if (xhr.status === 400) {
+                                    $('#Error').html('Only pdf format allowed');
+                                } else {
+                                    alert('someting goes wromg on server');
+                                }
+                                return false;
+                            },
+                            cache: false,
+                            contentType: false,
+                            processData: false
+                        });
+                    },
+                    error: function (xhr) {
+                        if (xhr.status === 400) {
+                            $('#Error').html('This email already exist');
+                        } else {
+                            alert('someting goes wromg on server');
+                        }
+                        return false;
+                    }
+                });
+            });
+        })
+    </script>
+</body>
+
+</html>

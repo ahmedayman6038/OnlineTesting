@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+        <%= title %>
+    </title>
+    <link rel='stylesheet' href='/css/bootstrap.min.css' />
+    <link rel='stylesheet' href='/stylesheets/pace.min.css' />
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+
+<body>
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">Online Testing</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-item nav-link" href="/candidates">Candidates <span class="sr-only">(current)</span></a>
+                    <a class="nav-item nav-link active" href="/exams">Exams</a>
+                    <a class="nav-item nav-link" href="/topics">Topics</a>
+                    <a class="nav-item nav-link" href="/questions">Questions</a>
+                    <a class="nav-item nav-link" href="/positions">Positions</a>
+                    <a class="nav-item nav-link" href="/hrs">HRS</a>
+                    <li class="nav-item dropdown" style="margin-left: 390px;">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                            Welcome
+                            <%= userName%>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="/hrs/logout">Logout</a>
+                        </div>
+                    </li>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="container" style="padding-top:70px;">
+
+
+        <h3>Exams</h3>
+        <p>
+            <a href="/exams/add">Add Exam</a>
+        </p>
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Name</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <% exams.forEach((exam, index) => { %>
+                <tr>
+                    <th scope="row">
+                        <%= exam.ID %>
+                    </th>
+                    <td>
+                        <%= exam.Name %>
+                    </td>
+                    <td><a href="/exams/topics/<%= exam.ID %>">Add/Remove Topics</a> |
+                        <a href="/exams/edit/<%= exam.ID %>">Edit</a> |
+                        <a href="/exams/delete/<%= exam.ID %>" class="delete" id="<%= exam.ID%>">Delete</a></td>
+                </tr>
+                <% }) %>
+            </tbody>
+        </table>
+
+        <hr />
+        <footer>
+            <p>&copy;
+                <%= new Date().getFullYear() %> - OnlineTesting</p>
+        </footer>
+    </div>
+    <script src="/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/javascripts/pace.min.js"></script>
+    <script>
+        $(document).ajaxStart(function () {
+            Pace.restart()
+        });
+        $(document).ready(function () {
+            $(".delete").click(function () {
+                var id = $(this).attr('id');
+                $.ajax({
+                    url: '/exams/delete/' + id,
+                    type: 'DELETE',
+                    success: function () {
+                        window.location.replace("/exams");
+                    },
+                    error: function (xhr) {
+                        alert("Something goes wrong");
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

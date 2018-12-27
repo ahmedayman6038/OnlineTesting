@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+        <%= title %>
+    </title>
+    <link rel='stylesheet' href='/css/bootstrap.min.css' />
+    <link rel='stylesheet' href='/stylesheets/pace.min.css' />
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+
+<body>
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">Online Testing</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-item nav-link active" href="/candidates">Candidates <span class="sr-only">(current)</span></a>
+                    <a class="nav-item nav-link" href="/exams">Exams</a>
+                    <a class="nav-item nav-link" href="/topics">Topics</a>
+                    <a class="nav-item nav-link" href="/questions">Questions</a>
+                    <a class="nav-item nav-link" href="/positions">Positions</a>
+                    <a class="nav-item nav-link" href="/hrs">HRS</a>
+                    <li class="nav-item dropdown" style="margin-left: 390px;">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                            Welcome
+                            <%= userName%>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="/hrs/logout">Logout</a>
+                        </div>
+                    </li>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="container" style="padding-top:70px;">
+
+        <h3>Candidates</h3>
+        <br>
+        <form method="GET" action="/candidates">
+            <div class="form-row">
+                <div class="col-1">
+                    <label for="option" class="mt-2">Search By:</label>
+                </div>
+                <div class="col-5">
+                    <select class="form-control" id="option" name="option">
+                        <option value="email" <% if(option=="email" ){%>selected
+                            <%}%> >Email</option>
+                        <option value="name" <% if(option=="name" ){%>selected
+                            <%}%> >Name</option>
+                        <option value="type" <% if(option=="type" ){%>selected
+                            <%}%> >Exam Type</option>
+                        <option value="date" <% if(option=="date" ){%>selected
+                            <%}%> >Exam Date</option>
+                    </select>
+                </div>
+                <div class="col-5" id="search-data">
+
+                </div>
+                <div class="col-1">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </div>
+            </div>
+        </form>
+        <br>
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Phone</th>
+                    <th scope="col">Postion</th>
+                    <th scope="col">CV</th>
+                    <th scope="col">Approved</th>
+                    <th scope="col">Result</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if(candidates.length == 0) {%>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <th scope="row" style="text-align:center">
+                        No Result Founded
+                    </th>
+                </tr>
+                <% }else{ candidates.forEach((candidate, index) => { %>
+                <tr>
+                    <th scope="row">
+                        <%= candidate.ID %>
+                    </th>
+                    <td>
+                        <%= candidate.CandidateName %>
+                    </td>
+                    <td>
+                        <%= candidate.Email %>
+                    </td>
+                    <td>
+                        <%= candidate.Phone %>
+                    </td>
+                    <td>
+                        <%= candidate.PositionName %>
+                    </td>
+                    <td><a href="/candidates/cv/<%= candidate.ID %>" target="blank">Download</a></td>
+                    <% if(candidate.Deadline != null) {%>
+                    <td>Yes</td>
+                    <%} else {%>
+                    <td><a href="/candidates/approve/<%= candidate.ID %>">Approve</a></td>
+                    <%}%>
+                    <% if(candidate.Deadline != null) {%>
+                    <td><a href="/candidates/result/<%= candidate.ID %>">Result</a></td>
+                    <%}%>
+                </tr>
+                <% })} %>
+            </tbody>
+        </table>
+
+        <hr />
+        <footer>
+            <p>&copy;
+                <%= new Date().getFullYear() %> - OnlineTesting</p>
+        </footer>
+    </div>
+    <script src="/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/javascripts/pace.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var option = "<%= option %>";
+            if (option == "date") {
+                $("#search-data").append(
+                    '<input type="date" class="form-control" placeholder="Date" name="date" id="date" value="<%= value%>" >'
+                );
+            } else if (option == "name") {
+                $("#search-data").append(
+                    '<input type="text" class="form-control" placeholder="Name" name="name" id="name" value="<%= value%>" >'
+                );
+            } else if (option == "type") {
+                $("#search-data").append(
+                    '<select class="form-control" id="type" name="type"><% exams.forEach((exam, index) => { %> <option value = "<%= exam.ID %>" <% if(exam.ID==value ){%>selected<%}%> ><%= exam.Name %> </option><% }) %> </select>'
+                );
+            } else {
+                $("#search-data").append(
+                    '<input type="text" class="form-control" placeholder="Email" name="email" id="email" value="<%= value%>" >'
+                );
+            }
+            $("#option").change(function () {
+                var value = this.value;
+                val = "";
+                if (value == "email") {
+                    $("#search-data").empty();
+                    $("#search-data").append(
+                        '<input type="text" class="form-control" placeholder="Email" name="email" id="email" >'
+                    );
+                } else if (value == "name") {
+                    $("#search-data").empty();
+                    $("#search-data").append(
+                        '<input type="text" class="form-control" placeholder="Name" name="name" id="name" >'
+                    );
+                } else if (value == "type") {
+                    $("#search-data").empty();
+                    $("#search-data").append(
+                        '<select class="form-control" id="type" name="type"><% exams.forEach((exam, index) => { %> <option value = "<%= exam.ID %>" ><%= exam.Name %> </option><% }) %> </select>'
+                    );
+                } else {
+                    $("#search-data").empty();
+                    $("#search-data").append(
+                        '<input type="date" class="form-control" placeholder="Date" name="date" id="date" >'
+                    );
+                }
+            })
+        });
+    </script>
+</body>
+
+</html>

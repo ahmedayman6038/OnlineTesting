@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+        <%= title %>
+    </title>
+    <link rel='stylesheet' href='/css/bootstrap.min.css' />
+    <link rel='stylesheet' href='/stylesheets/pace.min.css' />
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+
+<body class="bg-linear">
+    <div class="container emp-profile">
+        <form method="post">
+            <div class="row">
+
+                <div class="col-md-12">
+                    <div class="profile-head">
+                        <h5>
+                            <%= candidate.CandidateName%>
+                        </h5>
+                        <h6>
+                            <%= candidate.PositionName%>
+                            <div class="timer" style="color: #dc3545;">Deadline: <span id="time">
+                                    <%= candidate.Deadline %></span></div>
+                        </h6>
+                        <p class="proile-rating">Completed : <span>
+                                <%= completed%>/
+                                <%= exams.length%></span></p>
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
+                                    aria-controls="home" aria-selected="true">About</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
+                                    aria-controls="profile" aria-selected="false">Exmas</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-md-8">
+                    <div class="tab-content profile-tab" id="myTabContent">
+                        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>User Id</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>
+                                        <%= candidate.ID%>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Name</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>
+                                        <%= candidate.CandidateName%>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Email</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>
+                                        <%= candidate.Email%>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Phone</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>
+                                        <%= candidate.Phone%>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>CV</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><a href="/candidates/cv/<%= candidate.ID%>" target="blank">Download</a></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                            <% exams.forEach((exam, index) => { %>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>
+                                        <%= exam.Name%></label>
+                                </div>
+                                <div class="col-md-6">
+                                    <% if(exam.Completed == 0){%>
+                                    <p><a href="/exam/<%= exam.ID%>" class="btn btn-outline-primary startExam">Start</a></p>
+                                    <%}else{%>
+                                    <p><a href="#" class="btn btn-outline-secondary startExam" style="pointer-events: none;">Completed</a></p>
+                                    <%}%>
+                                </div>
+                            </div>
+                            <% }) %>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script src="/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/javascripts/pace.min.js"></script>
+</body>
+
+</html>

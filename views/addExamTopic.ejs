@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+        <%= title %>
+    </title>
+    <link rel='stylesheet' href='/css/bootstrap.min.css' />
+    <link rel='stylesheet' href='/stylesheets/pace.min.css' />
+    <link rel='stylesheet' href='/multiselect/css/multi-select.css' />
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+
+<body>
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">Online Testing</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-item nav-link" href="/candidates">Candidates <span class="sr-only">(current)</span></a>
+                    <a class="nav-item nav-link" href="/exams">Exams</a>
+                    <a class="nav-item nav-link" href="/topics">Topics</a>
+                    <a class="nav-item nav-link" href="/questions">Questions</a>
+                    <a class="nav-item nav-link" href="/positions">Positions</a>
+                    <a class="nav-item nav-link" href="/hrs">HRS</a>
+                    <li class="nav-item dropdown" style="margin-left: 390px;">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                            Welcome
+                            <%= userName%>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="/hrs/logout">Logout</a>
+                        </div>
+                    </li>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="container" style="padding-top:70px;">
+
+
+        <h3>Add or remove topics to exam</h3>
+        <br>
+        <select multiple="multiple" id="my-select" name="my-select[]">
+            <% topics.forEach((topic, index) => { %>
+            <option value='<%= topic.ID%>' <% examTopics.forEach((examTopic, index)=> { if(examTopic.ID == topic.ID) {
+                %> selected
+                <% } }) %> >
+                <%= topic.Name%>
+            </option>
+            <% }) %>
+        </select>
+        <br>
+        <div>
+            <a href="/exams">Back to List</a>
+        </div>
+
+
+        <hr />
+        <footer>
+            <p>&copy;
+                <%= new Date().getFullYear() %> - OnlineTesting</p>
+        </footer>
+    </div>
+    <script src="/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/javascripts/pace.min.js"></script>
+    <script src="/multiselect/js/jquery.multi-select.js"></script>
+    <script>
+        $(document).ajaxStart(function () {
+            Pace.restart()
+        });
+        $(document).ready(function () {
+            $('#my-select').multiSelect({
+                keepOrder: true,
+                afterSelect: function (values) {
+                    $.ajax({
+                        url: '/exams/addTopic/' + values + '/to/' + <%= examId %>,
+                        type: 'POST',
+                        success: function () {
+
+                        },
+                        error: function (xhr) {
+                            alert("Something goes wrong");
+                        }
+                    });
+                },
+                afterDeselect: function (values) {
+                    $.ajax({
+                        url: '/exams/removeTopic/' + values + '/to/' + <%= examId %>,
+                        type: 'POST',
+                        success: function () {
+
+                        },
+                        error: function (xhr) {
+                            alert("Something goes wrong");
+                        }
+                    });
+                }
+            });
+        })
+    </script>
+</body>
+
+</html>

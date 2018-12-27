@@ -1,0 +1,45 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Online Testing</title>
+</head>
+
+<body>
+  <div class="jumbotron text-xs-center">
+    <h1 class="display-3" style="text-align: center;">Exam Result</h1>
+    <p>Candidate Name: <strong>
+        <%= candidateName%></strong> </p>
+    <table border="1" style="width:">
+      <tr>
+        <th>Exam Name</th>
+        <th>Total Questions</th>
+        <th>Correct</th>
+        <th>Score</th>
+      </tr>
+      <tr>
+        <td>
+          <%= examName%>
+        </td>
+        <td>
+          <%= questions%>
+        </td>
+        <td>
+          <%= correct%>
+        </td>
+        <td>
+          <%= score%>
+        </td>
+      </tr>
+    </table>
+    <hr>
+
+    <p class="lead">
+      <a class="btn btn-primary btn-sm" href="http://localhost:3000/profile/<%= code %>" role="button">Continue exam</a>
+    </p>
+  </div>
+</body>
+
+</html>

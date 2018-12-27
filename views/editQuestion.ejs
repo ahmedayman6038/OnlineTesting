@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+        <%= title %>
+    </title>
+    <link rel='stylesheet' href='/css/bootstrap.min.css' />
+    <link rel='stylesheet' href='/stylesheets/pace.min.css' />
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+
+<body>
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">Online Testing</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-item nav-link" href="/candidates">Candidates <span class="sr-only">(current)</span></a>
+                    <a class="nav-item nav-link" href="/exams">Exams</a>
+                    <a class="nav-item nav-link" href="/topics">Topics</a>
+                    <a class="nav-item nav-link" href="/questions">Questions</a>
+                    <a class="nav-item nav-link" href="/positions">Positions</a>
+                    <a class="nav-item nav-link" href="/hrs">HRS</a>
+                    <li class="nav-item dropdown" style="margin-left: 390px;">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                            Welcome
+                            <%= userName%>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="/hrs/logout">Logout</a>
+                        </div>
+                    </li>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="container" style="padding-top:70px;">
+
+
+        <form action="/questions/edit" method="post" id="myForm">
+            <div class="form-horizontal">
+                <h4>Edit Question</h4>
+                <hr>
+                <input type="hidden" name="ID" id="ID" value="<%= id %>">
+                <input type="hidden" name="Counter" id="Counter" value="<%= answers.length%>">
+                <div class="form-group">
+                    <label class="control-label col-md-2" for="Name">Name</label>
+                    <div class="col-md-10">
+                        <input type="text" class="form-control text-box single-line" name="Name" id="Name" value="<%= name %>">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2" for="Topic">Topic</label>
+                    <div class="col-md-10">
+                        <select class="form-control" id="Topic" name="Topic">
+                            <% topics.forEach((topic, index) => { %>
+                            <option value="<%= topic.ID %>" <% if(topicId==topic.ID){ %>selected
+                                <%}%> >
+                                <%= topic.Name %>
+                            </option>
+                            <% }) %>
+                        </select>
+                    </div>
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Answer</th>
+                            <th scope="col">Valid</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% answers.forEach((answer, index) => { %>
+                        <tr>
+                            <th scope="row">
+                                <%= index+1 %>
+                            </th>
+                            <input type="hidden" name="A<%= index+1 %>ID" id="A<%= index+1 %>ID" value="<%= answer.ID %>">
+                            <td><input type="text" class="form-control" id="Answer<%= index+1%>" name="Answer<%= index+1%>"
+                                    value="<%= answer.Name %>"></td>
+                            <td><input type="radio" class="form-check-input" id="Valid<%= index+1%>" name="Valid" value="<%= index+1%>"
+                                    style="margin-left: 16px;margin-top: 13px;" <% if(answer.Valid==1){%>checked
+                                <%}%> ></td>
+                        </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+                <div class="form-group">
+                    <div class="col-md-10">
+                        <button type="button" class="btn btn-success" id="AddAnswer">Add Answer</button>
+                        <button type="button" class="btn btn-danger" id="DeleteAnswer">Delete Answer</button>
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-10">
+                        <span class="text-danger" id="Error"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Edit" class="btn btn-primary" name="submit">
+                    </div>
+                </div>
+            </div>
+        </form>
+
+
+        <div>
+            <a href="/questions">Back to List</a>
+        </div>
+
+
+        <hr />
+        <footer>
+            <p>&copy;
+                <%= new Date().getFullYear() %> - OnlineTesting</p>
+        </footer>
+    </div>
+    <script src="/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/javascripts/pace.min.js"></script>
+    <script>
+        $(document).ajaxStart(function () {
+            Pace.restart()
+        });
+        $(document).ready(function () {
+            var counter = parseInt($("#Counter").val());
+            if (counter == 4) {
+                $("#DeleteAnswer").hide();
+            }
+            $("form#myForm").submit(function (e) {
+                var topic = $("#Topic").val();
+                var valid = $("input[name='Valid']:checked").val();
+                var submitForm = true;
+                $("#myForm input[type=text]").each(function () {
+                    if (this.value == '') {
+                        submitForm = false;
+                        return false;
+                    }
+                });
+                if (!submitForm) {
+                    $("#Error").html("Please Enter all data");
+                    return false;
+                }
+                if (topic == null || valid == null) {
+                    $("#Error").html("Please Enter all data");
+                    return false;
+                }
+            });
+            $("#AddAnswer").click(function () {
+                var counter = parseInt($("#Counter").val());
+                counter += 1;
+                if (counter == 5) {
+                    $("#DeleteAnswer").show();
+                }
+                var markup = '<tr><th scope="row">' + counter +
+                    '</th> <td><input type="text" class="form-control" id="Answer' + counter +
+                    '" name="Answer' + counter +
+                    '"></td><td><input type="radio" class="form-check-input" id="Valid' + counter +
+                    '" name="Valid" value="' + counter +
+                    '" style="margin-left: 16px;margin-top: 13px;"></td></tr>';
+                $("table tbody").append(markup);
+                $("#Counter").val(counter);
+            });
+            $("#DeleteAnswer").click(function () {
+                var counter = parseInt($("#Counter").val());
+                counter -= 1;
+                if (counter == 4) {
+                    $("#DeleteAnswer").hide();
+                }
+                $('table tr:last').remove();
+                $("#Counter").val(counter);
+            });
+        });
+    </script>
+</body>
+
+</html>

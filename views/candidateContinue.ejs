@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+        <%= title %>
+    </title>
+    <link rel='stylesheet' href='/css/bootstrap.min.css' />
+    <link rel='stylesheet' href='/stylesheets/pace.min.css' />
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+
+<body class="bg-linear">
+
+    <div class="container">
+        <div id="login-row" class="row justify-content-center align-items-center">
+            <div id="login-column" class="col-md-6">
+                <div class="box">
+                    <div class="shape1"></div>
+                    <div class="shape2"></div>
+                    <div class="shape3"></div>
+                    <div class="shape4"></div>
+                    <div class="shape5"></div>
+                    <div class="shape6"></div>
+                    <div class="shape7"></div>
+                    <div class="float">
+                        <form class="form" action="/continue" method="POST" id="myForm">
+                            <div class="text-center mb-4">
+                                <h4>Continue Test</h4>
+                            </div>
+                            <div class="input-group">
+                                <input type="email" class="form-control" placeholder="Enter your email" id="Email" name="Email">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-primary" type="submit">Go</button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-10" style="margin-top: 10px;">
+                                    <span class="text-danger" id="Error">
+                                        <%= error%></span>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/javascripts/pace.min.js"></script>
+    <script>
+        $(document).ajaxStart(function () {
+            Pace.restart()
+        });
+        $(document).ready(function () {
+            $("form#myForm").submit(function (e) {
+                var email = $("#Email").val();
+                if (email == '') {
+                    $("#Error").html("Email is required");
+                    return false;
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

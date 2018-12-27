@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+        <%= title %>
+    </title>
+    <link rel='stylesheet' href='/css/bootstrap.min.css' />
+    <link rel='stylesheet' href='/stylesheets/pace.min.css' />
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+
+<body>
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">Online Testing</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-item nav-link" href="/candidates">Candidates <span class="sr-only">(current)</span></a>
+                    <a class="nav-item nav-link" href="/exams">Exams</a>
+                    <a class="nav-item nav-link" href="/topics">Topics</a>
+                    <a class="nav-item nav-link" href="/questions">Questions</a>
+                    <a class="nav-item nav-link" href="/positions">Positions</a>
+                    <a class="nav-item nav-link" href="/hrs">HRS</a>
+                    <li class="nav-item dropdown" style="margin-left: 390px;">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                            Welcome
+                            <%= userName%>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="/hrs/logout">Logout</a>
+                        </div>
+                    </li>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="container" style="padding-top:70px;">
+
+
+        <form action="/positions/edit" method="post" id="myForm">
+            <div class="form-horizontal">
+                <h4>Edit Position</h4>
+                <hr>
+                <input type="hidden" name="ID" id="ID" value="<%= id %>">
+                <div class="form-group">
+                    <label class="control-label col-md-2" for="Name">Name</label>
+                    <div class="col-md-10">
+                        <input type="text" class="form-control text-box single-line" name="Name" id="Name" value="<%= name %>">
+                        <span class="text-danger" id="Error">
+                            <%= error%></span>
+                    </div>
+                </div>
+                <div class="form-check">
+                    <div class="col-md-10">
+                        <input type="checkbox" class="form-check-input text-box single-line" id="Available" name="Available"
+                            value="true" <% if(available==1){ %>checked
+                        <%}%> >
+                        <label class="form-check-label" for="Available">Available</label>
+                    </div>
+                </div>
+                <br>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Edit" class="btn btn-primary" name="submit">
+                    </div>
+                </div>
+            </div>
+        </form>
+
+
+        <div>
+            <a href="/positions">Back to List</a>
+        </div>
+
+
+        <hr />
+        <footer>
+            <p>&copy;
+                <%= new Date().getFullYear() %> - OnlineTesting</p>
+        </footer>
+    </div>
+    <script src="/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/javascripts/pace.min.js"></script>
+    <script>
+        $(document).ajaxStart(function () {
+            Pace.restart()
+        });
+        $(document).ready(function () {
+            $("form#myForm").submit(function (e) {
+                var name = $("#Name").val();
+                if (name == '') {
+                    $("#Error").html("Name is required");
+                    return false;
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

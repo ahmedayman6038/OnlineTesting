@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+        <%= title %>
+    </title>
+    <link rel='stylesheet' href='/css/bootstrap.min.css' />
+    <link rel='stylesheet' href='/stylesheets/pace.min.css' />
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+
+<body>
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">Online Testing</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-item nav-link active" href="/candidates">Candidates <span class="sr-only">(current)</span></a>
+                    <a class="nav-item nav-link" href="/exams">Exams</a>
+                    <a class="nav-item nav-link" href="/topics">Topics</a>
+                    <a class="nav-item nav-link" href="/positions">Positions</a>
+                    <a class="nav-item nav-link" href="/questions">Questions</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="container" style="padding-top:70px;">
+
+        <h3>Result</h3>
+        <hr>
+        <dl class="row">
+            <dt class="col-sm-3">Name</dt>
+            <dd class="col-sm-9">
+                <%= results[0].CandidateName%>
+            </dd>
+
+            <dt class="col-sm-3">Email</dt>
+            <dd class="col-sm-9">
+                <%= results[0].CandidateEmail%>
+            </dd>
+
+            <dt class="col-sm-3">Phone</dt>
+            <dd class="col-sm-9">
+                <%= results[0].CandidatePhone%>
+            </dd>
+
+
+
+        </dl>
+
+        <% if(completed == 0){%>
+        <h3>This candidates doesn't complete his test</h3>
+        <%}else{%>
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Exam</th>
+                    <th scope="col">Questions</th>
+                    <th scope="col">Solved</th>
+                    <th scope="col">Correct</th>
+                    <th scope="col">Score</th>
+                    <th scope="col">Answers</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% results.forEach((result, index) => { %>
+                <tr>
+                    <td>
+                        <%= result.ExamName %>
+                    </td>
+                    <td>
+                        <%= result.QuestionsNumber %>
+                    </td>
+                    <td>
+                        <%= result.QuestionsSolved %>
+                    </td>
+                    <td>
+                        <%= result.QuestionsCorrect %>
+                    </td>
+                    <td>
+                        <%= result.Score %>
+                    </td>
+                    <td>
+                        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#exam<%=index %>"
+                            aria-expanded="false" aria-controls="exam<%=index %>">
+                            Show
+                        </button>
+                    </td>
+                </tr>
+
+
+            <tbody class="collapse" id="exam<%=index %>">
+                <tr class="table-active">
+                    <th scope="col">Question</th>
+                    <th scope="col">Answer</th>
+                    <th scope="col">Correct</th>
+                </tr>
+                <% result.ExamQuestions.forEach((question, index) => { %>
+                <tr>
+                    <td>
+                        <%= question.QuestionName %>
+                    </td>
+                    <td>
+                        <%= question.QuestionAnswer %>
+                    </td>
+                    <td>
+                        <%= question.QuestionCorrect %>
+                    </td>
+                </tr>
+                <% }) %>
+            </tbody>
+
+            <% }) %>
+            </tbody>
+        </table>
+        <%}%>
+        <hr />
+        <footer>
+            <p>&copy;
+                <%= new Date().getFullYear() %> - OnlineTesting</p>
+        </footer>
+    </div>
+    <script src="/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/javascripts/pace.min.js"></script>
+    <script>
+        $(document).ready(function () {
+
+        });
+    </script>
+</body>
+
+</html>
