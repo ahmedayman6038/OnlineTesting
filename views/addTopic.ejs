@@ -49,9 +49,21 @@
                 <hr>
 
                 <div class="form-group">
-                    <label class="control-label col-md-2" for="Name">Name</label>
+                    <label class="control-label col-md-3" for="Name">Name</label>
                     <div class="col-md-10">
                         <input type="text" class="form-control text-box single-line" name="Name" id="Name" value="<%= name %>">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-3" for="Questions">Max Questions Number</label>
+                    <div class="col-md-10">
+                        <input type="number" class="form-control text-box single-line" name="Questions" id="Questions" value="<%= questions %>">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-10">
                         <span class="text-danger" id="Error">
                             <%= error%></span>
                     </div>
@@ -87,8 +99,9 @@
         $(document).ready(function () {
             $("form#myForm").submit(function (e) {
                 var name = $("#Name").val();
-                if (name == '') {
-                    $("#Error").html("Name is required");
+                var questions = $("#Questions").val();
+                if (name == '' || questions == '') {
+                    $("#Error").html("Enter all feild");
                     return false;
                 }
             });

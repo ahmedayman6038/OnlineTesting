@@ -183,11 +183,12 @@ router.get('/exam/:token', function (req, res, next) {
   var sql = "SELECT Completed FROM `candidate_exam` WHERE CandidateID = " + candidateId + " && ExamID = " + examId;
   var result = dbsync.query(sql);
   if (result[0].Completed == 0) {
-    var sql1 = "SELECT topic.ID, topic.Name FROM exam_topic INNER JOIN topic ON topic.ID = exam_topic.TopicID WHERE exam_topic.ExamID = " + examId;
+    var sql1 = "SELECT topic.ID, topic.Name, topic.QuestionsNumber FROM exam_topic INNER JOIN topic ON topic.ID = exam_topic.TopicID WHERE exam_topic.ExamID = " + examId;
     var result1 = dbsync.query(sql1);
     for (let i = 0; i < result1.length; i++) {
       var topicId = result1[i].ID;
-      var sql2 = "SELECT question.ID, question.Name FROM question WHERE question.TopicID = " + topicId + " ORDER BY RAND() LIMIT 5";
+      var questionsNumber = result1[i].QuestionsNumber;
+      var sql2 = "SELECT question.ID, question.Name FROM question WHERE question.TopicID = " + topicId + " ORDER BY RAND() LIMIT " + questionsNumber;
       var result2 = dbsync.query(sql2);
       var answers = [];
       for (let j = 0; j < result2.length; j++) {

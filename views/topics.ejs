@@ -52,6 +52,7 @@
                 <tr>
                     <th scope="col">ID</th>
                     <th scope="col">Name</th>
+                    <th scope="col">QuestionsNumber</th>
                     <th scope="col"></th>
                 </tr>
             </thead>
@@ -63,6 +64,9 @@
                     </th>
                     <td>
                         <%= topic.Name %>
+                    </td>
+                    <td>
+                        <%= topic.QuestionsNumber %>
                     </td>
                     <td>
                         <a href="/topics/edit/<%= topic.ID %>">Edit</a> |

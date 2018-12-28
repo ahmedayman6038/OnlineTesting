@@ -20,6 +20,7 @@ router.get('/add', function (req, res, next) {
   res.render('addTopic', {
     title: 'Topics',
     name: "",
+    questions: "",
     error: ""
   });
 });
@@ -27,6 +28,7 @@ router.get('/add', function (req, res, next) {
 /* Add topic */
 router.post('/add', function (req, res, next) {
   var name = req.body.Name;
+  var questions = req.body.Questions;
   var sql1 = "SELECT * FROM topic WHERE Name = '" + name + "'";
   db.query(sql1, function (err, result) {
     if (err)
@@ -35,10 +37,11 @@ router.post('/add', function (req, res, next) {
       return res.render('addTopic', {
         title: 'Topics',
         name: name,
+        questions: questions,
         error: "Name already exist"
       });
     }
-    var sql2 = "INSERT INTO `topic`(`Name`) VALUES ('" + name + "')";
+    var sql2 = "INSERT INTO `topic`(`Name`,`QuestionsNumber`) VALUES ('" + name + "',"+questions+")";
     db.query(sql2, function (err, result) {
       if (err)
         return res.status(500).send(err);
@@ -58,6 +61,7 @@ router.get('/edit/:id', function (req, res, next) {
       title: 'Topics',
       id: result[0].ID,
       name: result[0].Name,
+      questions: result[0].QuestionsNumber,
       error: ""
     });
   });
@@ -67,6 +71,7 @@ router.get('/edit/:id', function (req, res, next) {
 router.post('/edit', function (req, res, next) {
   var id = req.body.ID;
   var name = req.body.Name;
+  var questions = req.body.Questions;
   var sql1 = "SELECT * FROM topic WHERE Name = '" + name + "'";
   db.query(sql1, function (err, result) {
     if (err)
@@ -77,11 +82,12 @@ router.post('/edit', function (req, res, next) {
           title: 'Topics',
           id: id,
           name: name,
+          questions: questions,
           error: "Name already exist"
         });
       }
     }
-    var sql2 = "UPDATE `topic` SET `Name`='" + name + "' WHERE ID=" + id;
+    var sql2 = "UPDATE `topic` SET `Name`='" + name + "',`QuestionsNumber`="+questions+" WHERE ID=" + id;
     db.query(sql2, function (err, result) {
       if (err)
         return res.status(500).send(err);
