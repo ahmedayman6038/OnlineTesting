@@ -96,7 +96,7 @@ router.post('/addRegistration', function (req, res, next) {
     var fileName = secret.hide(email);
     var fileSave = fileName + '.' + fileExtension;
     var dir = "routes/uploads/";
-    if (!fs.existsSync(dir)){
+    if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir);
     }
     file.mv(`routes/uploads/${fileSave}`, function (err) {
@@ -307,11 +307,12 @@ router.get('/result/:token', function (req, res, next) {
       for (let i = 0; i < result2[1].length; i++) {
         emails.push(result2[1][i].Email);
       }
+      var url = req.hostname + "/profile/" + secret.hide(candidateId);
       for (let j = 0; j < emails.length; j++) {
         res.mailer.send('resultEmail', {
           to: emails[j],
           subject: 'Exam Result',
-          code: secret.hide(candidateId),
+          url: url,
           candidateName: candidateName,
           examName: examName,
           questions: questions,

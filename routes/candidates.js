@@ -91,10 +91,11 @@ router.post('/sendApprovalMail/:candidateId/:deadline', function (req, res, next
     if (result.length == 0) {
       return res.status(404).send("Candidate not founded");
     }
+    var url = req.hostname + "/profile/" + secret.hide(candidateId);
     res.mailer.send('approvalEmail', {
       to: result[0].Email,
       subject: 'Approved',
-      code: secret.hide(candidateId),
+      url: url,
       name: result[0].Name.split(' ')[0]
     }, function (err) {
       if (err)
