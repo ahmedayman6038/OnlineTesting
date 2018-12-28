@@ -22,18 +22,20 @@ var app = express();
 
 // create connection to database
 var db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: '',
-  database: 'online_testing',
+  host: 'bfavros1a-mysql.services.clever-cloud.com',
+  user: 'uwckeymkkab6tfqt',
+  password: 'w3bbS89X23WCDw2OHWM',
+  database: 'bfavros1a',
+  port: 3306,
   multipleStatements: true
 });
 
 var dbsync = new mysqlsync({
-  host: 'localhost',
-  user: 'root',
-  password: '',
-  database: 'online_testing',
+  host: 'bfavros1a-mysql.services.clever-cloud.com',
+  user: 'uwckeymkkab6tfqt',
+  password: 'w3bbS89X23WCDw2OHWM',
+  database: 'bfavros1a',
+  port: 3306,
   multipleStatements: true
 });
 
