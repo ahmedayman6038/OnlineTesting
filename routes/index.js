@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var fs = require('fs');
 var secret = require('../helper/secret');
 var utility = require('../helper/utility');
 
@@ -94,6 +95,10 @@ router.post('/addRegistration', function (req, res, next) {
     var fileExtension = file.mimetype.split('/')[1];
     var fileName = secret.hide(email);
     var fileSave = fileName + '.' + fileExtension;
+    var dir = "routes/uploads/";
+    if (!fs.existsSync(dir)){
+      fs.mkdirSync(dir);
+    }
     file.mv(`routes/uploads/${fileSave}`, function (err) {
       if (err)
         return res.status(500).send(err);
