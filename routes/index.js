@@ -66,7 +66,8 @@ router.post('/login', function (req, res, next) {
     if (result.length == 0) {
       return res.render('login', {
         title: 'Login',
-        error: "Email or Password Not Exist"
+        error: "Email or Password Not Exist",
+        userUrl: returnUrl
       });
     }
     req.session.hrId = result[0].ID;

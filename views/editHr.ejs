@@ -112,6 +112,12 @@
                     $("#Error").html("Please enter all feild");
                     return false;
                 }
+                var filter =
+                    /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                if (!filter.test(email)) {
+                    $('#Error').html('Please enter valid email');
+                    return false;
+                }
             });
         });
     </script>
