@@ -57,7 +57,7 @@
             </thead>
             <tbody>
                 <% exams.forEach((exam, index) => { %>
-                <tr>
+                <tr id="row<%= exam.ID%>">
                     <th scope="row">
                         <%= exam.ID %>
                     </th>
@@ -66,7 +66,7 @@
                     </td>
                     <td><a href="/exams/topics/<%= exam.ID %>">Add/Remove Topics</a> |
                         <a href="/exams/edit/<%= exam.ID %>">Edit</a> |
-                        <a href="/exams/delete/<%= exam.ID %>" class="delete" id="<%= exam.ID%>">Delete</a></td>
+                        <a href="" class="delete" id="<%= exam.ID%>">Delete</a></td>
                 </tr>
                 <% }) %>
             </tbody>
@@ -91,8 +91,8 @@
                 $.ajax({
                     url: '/exams/delete/' + id,
                     type: 'DELETE',
-                    success: function () {
-                        window.location.replace("/exams");
+                    success: function (data) {
+                        $('#row'+id).remove();
                     },
                     error: function (xhr) {
                         alert("Something goes wrong");

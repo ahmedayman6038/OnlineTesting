@@ -58,7 +58,7 @@
             </thead>
             <tbody>
                 <% positions.forEach((position, index) => { %>
-                <tr>
+                <tr id="row<%= position.ID%>">
                     <th scope="row">
                         <%= position.ID %>
                     </th>
@@ -72,7 +72,7 @@
                     </td>
                     <td>
                         <a href="/positions/edit/<%= position.ID %>">Edit</a> |
-                        <a href="/positions/delete/<%= position.ID %>" class="delete" id="<%= position.ID%>">Delete</a></td>
+                        <a href="" class="delete" id="<%= position.ID%>">Delete</a></td>
                 </tr>
                 <% }) %>
             </tbody>
@@ -98,7 +98,7 @@
                     url: '/positions/delete/' + id,
                     type: 'DELETE',
                     success: function () {
-                        window.location.replace("/positions");
+                        $('#row'+id).remove();
                     },
                     error: function (xhr) {
                         alert("Something goes wrong");
