@@ -155,9 +155,9 @@ router.get('/result/:id', function (req, res, next) {
     }
     var totalResult = (totalScore / (result1[0].length * 100)) * 100;
     var candidateInfo = {
-      CandidateName: result1[0][i].CandidateName,
-      CandidateEmail: result1[0][i].Email,
-      CandidatePhone: result1[0][i].Phone,
+      CandidateName: result1[0][0].CandidateName,
+      CandidateEmail: result1[0][0].Email,
+      CandidatePhone: result1[0][0].Phone,
       CandidateResult: totalResult
     }
     return res.render('candidateResult', {
