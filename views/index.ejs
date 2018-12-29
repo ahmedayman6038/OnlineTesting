@@ -75,7 +75,7 @@
                                         <label for="CV" class="btn btn-primary btn-block">Select Your CV(.pdf) *</label>
                                         <input type="file" class="form-control" id="CV" name="CV" style="display: none" />
                                     </div>
-                                    <input type="submit" class="btnRegister" value="Register" />
+                                    <input type="submit" class="btnRegister" name="Register" id="Register" value="Register" />
                                 </div>
                             </div>
                         </form>
@@ -124,6 +124,7 @@
                     $('#Error').html('Please enter valid email');
                     return false;
                 }
+                $("#Register").val("Sending...");
                 $.ajax({
                     url: '/checkEmail/' + email,
                     type: 'GET',
@@ -144,6 +145,9 @@
                                     alert('someting goes wromg on server');
                                 }
                                 return false;
+                            },
+                            complete: function(){
+                                $("#Register").val("Register");
                             },
                             cache: false,
                             contentType: false,
