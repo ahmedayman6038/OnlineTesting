@@ -113,18 +113,6 @@ router.post('/sendApprovalMail/:candidateId/:deadline', function (req, res, next
   });
 });
 
-/* GET candidate cv */
-router.get('/cv/:id', function (req, res, next) {
-  var id = req.params.id;
-  var sql = "SELECT * FROM candidate WHERE ID =" + id;
-  db.query(sql, function (err, result) {
-    if (err)
-      return res.status(500).send(err);
-    var file = __dirname + '/uploads/' + result[0].CV + '.pdf';
-    res.download(file);
-  });
-});
-
 /* GET result page */
 router.get('/result/:id', function (req, res, next) {
   var candidateId = req.params.id;

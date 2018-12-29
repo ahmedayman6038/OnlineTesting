@@ -80,6 +80,18 @@ router.post('/login', function (req, res, next) {
   });
 });
 
+/* GET candidate cv */
+router.get('/download/cv/:id', function (req, res, next) {
+  var id = req.params.id;
+  var sql = "SELECT * FROM candidate WHERE ID =" + id;
+  db.query(sql, function (err, result) {
+    if (err)
+      return res.status(500).send(err);
+    var file = __dirname + '/uploads/' + result[0].CV + '.pdf';
+    res.download(file);
+  });
+});
+
 /* Add candidate registraion */
 router.post('/addRegistration', function (req, res, next) {
   if (!req.files) {
