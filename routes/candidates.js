@@ -117,6 +117,7 @@ router.post('/sendApprovalMail/:candidateId/:deadline', function (req, res, next
 router.get('/result/:id', function (req, res, next) {
   var candidateId = req.params.id;
   var results = [];
+  var totalScore = 0;
   var sql1 = "SELECT candidate.ID As CandidateID, candidate.Name AS CandidateName, candidate.Email, candidate.Phone, exam.ID AS ExamID, exam.Name AS ExamName, candidate_exam.Questions FROM `candidate_exam` INNER JOIN exam on exam.ID = candidate_exam.ExamID INNER JOIN candidate ON candidate.ID = candidate_exam.CandidateID WHERE candidate_exam.CandidateID = " + candidateId + ";SELECT * FROM `candidate_exam` WHERE candidate_exam.CandidateID = " + candidateId + "&& Completed = 1";
   var result1 = dbsync.query(sql1);
   if (result1[0].length == result1[1].length) {
@@ -139,10 +140,8 @@ router.get('/result/:id', function (req, res, next) {
         questions.push(question);
       }
       var score = (questionsCorrect / result1[0][i].Questions) * 100;
+      totalScore += score;
       var result = {
-        CandidateName: result1[0][i].CandidateName,
-        CandidateEmail: result1[0][i].Email,
-        CandidatePhone: result1[0][i].Phone,
         ExamID: result1[0][i].ExamID,
         ExamName: result1[0][i].ExamName,
         QuestionsNumber: result1[0][i].Questions,
@@ -154,21 +153,31 @@ router.get('/result/:id', function (req, res, next) {
       results.push(result);
       questions = [];
     }
+    var totalResult = (totalScore / (result1[0].length * 100)) * 100;
+    var candidateInfo = {
+      CandidateName: result1[0][i].CandidateName,
+      CandidateEmail: result1[0][i].Email,
+      CandidatePhone: result1[0][i].Phone,
+      CandidateResult: totalResult
+    }
     return res.render('candidateResult', {
       title: 'Result',
       results: results,
+      candidateInfo: candidateInfo,
       completed: 1
     });
   }
-  var result = {
+  var candidateInfo = {
     CandidateName: result1[0][0].CandidateName,
     CandidateEmail: result1[0][0].Email,
-    CandidatePhone: result1[0][0].Phone
+    CandidatePhone: result1[0][0].Phone,
+    CandidateResult: totalScore
   }
   results.push(result);
   return res.render('candidateResult', {
     title: 'Result',
     results: results,
+    candidateInfo: candidateInfo,
     completed: 0,
   });
 });

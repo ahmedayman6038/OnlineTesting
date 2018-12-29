@@ -36,21 +36,23 @@
         <dl class="row">
             <dt class="col-sm-3">Name</dt>
             <dd class="col-sm-9">
-                <%= results[0].CandidateName%>
+                <%= candidateInfo.CandidateName%>
             </dd>
 
             <dt class="col-sm-3">Email</dt>
             <dd class="col-sm-9">
-                <%= results[0].CandidateEmail%>
+                <%= candidateInfo.CandidateEmail%>
             </dd>
 
             <dt class="col-sm-3">Phone</dt>
             <dd class="col-sm-9">
-                <%= results[0].CandidatePhone%>
+                <%= candidateInfo.CandidatePhone%>
             </dd>
 
-
-
+            <dt class="col-sm-3">Total Result</dt>
+            <dd class="col-sm-9">
+                <%= candidateInfo.CandidateResult%>%
+            </dd>
         </dl>
 
         <% if(completed == 0){%>
@@ -83,7 +85,7 @@
                         <%= result.QuestionsCorrect %>
                     </td>
                     <td>
-                        <%= result.Score %>
+                        <%= result.Score %>%
                     </td>
                     <td>
                         <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#exam<%=index %>"
