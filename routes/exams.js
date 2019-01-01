@@ -90,6 +90,7 @@ router.post('/edit', function (req, res, next) {
   });
 });
 
+
 /* Remove exam */
 router.delete('/delete/:id', function (req, res, next) {
   var id = req.params.id;
